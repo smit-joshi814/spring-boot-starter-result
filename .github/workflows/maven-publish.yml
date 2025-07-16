@@ -48,7 +48,8 @@ jobs:
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import --quiet
           echo "use-agent" >> ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          export GPG_TTY=$(tty)
+          echo "batch" >> ~/.gnupg/gpg.conf
+          echo "no-tty" >> ~/.gnupg/gpg.conf
 
       - name: Extract Version from pom.xml
         id: get_version
@@ -64,10 +65,9 @@ jobs:
 
       - name: Publish to Maven Central
         if: ${{ !contains(env.VERSION, '-SNAPSHOT') }}
-        run: mvn deploy -P release -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn deploy -P release -s $GITHUB_WORKSPACE/settings.xml -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GPG_TTY: $(tty)
 
       - name: Create GitHub Release
         if: ${{ !contains(env.VERSION, '-SNAPSHOT') }}
