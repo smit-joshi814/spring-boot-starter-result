@@ -35,7 +35,7 @@ jobs:
                 <password>${{ secrets.GITHUB_TOKEN }}</password>
               </server>
               <server>
-                <id>ossrh</id>
+                <id>central</id>
                 <username>${{ secrets.OSSRH_USERNAME }}</username>
                 <password>${{ secrets.OSSRH_PASSWORD }}</password>
               </server>
