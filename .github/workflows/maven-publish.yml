@@ -43,9 +43,9 @@ jobs:
           </settings>" > $GITHUB_WORKSPACE/settings.xml
 
       - name: Import GPG Key
-        if: ${{ !contains(github.event.head_commit.message, 'SNAPSHOT') }}
+        if: ${{ !contains(env.VERSION, '-SNAPSHOT') }}
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import --quiet
 
       - name: Extract Version from pom.xml
         id: get_version
